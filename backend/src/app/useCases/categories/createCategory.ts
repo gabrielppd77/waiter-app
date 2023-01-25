@@ -5,9 +5,15 @@ import { Category } from "../../models/Category";
 export async function createCategory(req: Request, res: Response) {
   try {
     const { name, icon } = req.body;
+    if (!name || !icon) {
+      return res.status(400).json({
+        error: "Name and icon is required",
+      });
+    }
     const category = await Category.create({ name, icon });
     res.status(201).json(category);
-  } catch (error) {
-    res.json(error);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
   }
 }
